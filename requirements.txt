@@ -1,2 +1,4 @@
+bottle==0.12.9
 colorama==0.3.7
+gunicorn==19.6.0
 requests==2.10.0

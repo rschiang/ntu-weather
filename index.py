@@ -20,4 +20,5 @@ def api():
     except Exception:
         return {'error': 'data_unavailable'}
 
-app.run(debug=debug_switch, reloader=debug_switch)
+if __name__ == '__main__':
+    app.run(debug=debug_switch, reloader=debug_switch)
