@@ -6,11 +6,15 @@ app = Bottle()
 debug_switch = (os.environ.get('DEBUG') == '1')
 
 @app.route('/')
+@view('index')
 def index():
-    return 'It works!'
+    return fetch_api()
 
 @app.route('/api')
 def api():
+    return fetch_api()
+
+def fetch_api():
     try:
         response_text = weather.fetch()
     except IOError:
