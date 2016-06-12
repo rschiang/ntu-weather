@@ -46,6 +46,7 @@
 
         .weather .section {
             min-height: 30rem;
+            position: relative;
         }
 
         .weather h3 {
@@ -60,25 +61,35 @@
 
         .temperature .current {
             font-size: 8rem;
-            letter-spacing: -.4rem;
+            line-height: 10rem;
         }
 
         .temperature .unit {
             font-size: 3rem;
-            padding-top: 2rem;
+            font-weight: 200;
+            padding-top: 1.15rem;
             vertical-align: top;
         }
 
         .dashboard ul {
             color: rgba(255, 255, 255, .6);
+            letter-spacing: 0.05rem;
             list-style: none;
+            font-size: .875rem;
             margin: 0;
+            max-width: 24rem;
             padding: 0;
+        }
+
+        .dashboard li {
+            display: inline-block;
+            width: 48%;
         }
 
         .dashboard ul em {
             color: white;
             font-style: normal;
+            font-weight: 500;
         }
 
         .dashboard .wind {
@@ -86,14 +97,15 @@
             display: inline-block;
             margin: 0 .25rem;
             text-align: center;
-            width: 1rem;
+            width: 1em;
             vertical-align: middle;
         }
 
         .source {
+            bottom: 1rem;
             color: rgba(255, 255, 255, .5);
-            padding-top: 5rem;
             font-size: .75rem;
+            position: absolute;
         }
 
         footer {
@@ -146,6 +158,7 @@
 % if error:
             <h3>資訊暫時無法使用。</h3>
 % else:
+            <h3>國立臺灣大學, 台灣</h3>
             <div class="temperature">
                 <span class="current">{{ value(temperature) }}</span>
                 <span class="unit">°C</span>
@@ -153,7 +166,7 @@
             <div class="dashboard">
                 <ul>
                     <li>本日氣溫 <em>{{ value(temp_min) }} – {{ value(temp_max) }} °C</em></li>
-                    <li>風向 <span class="wind" style="transform: rotate({{ value(wind_direction, 1) - 90 }}deg)">➤</span> <em>{{ value(wind_speed) }} m/s</em></li>
+                    <li>風向 <span class="wind" style="transform: rotate({{ value(wind_direction, 1) - 90 }}deg)">➤</span> <em>{{ value(wind_speed, 1) }} m/s</em></li>
                     <li>氣壓 <em>{{ value(pressure, 1) }} hPa</em></li>
                     <li>降雨強度 <em>{{ value(rain, 1) }} mm/h</em></li>
                     <li>濕度 <em>{{ value(humidity, 1) }}%</em></li>
@@ -169,7 +182,7 @@
     <footer class="section">
         <div class="social">
             <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2FNTUWelfare&width=92&layout=button_count&action=like&show_faces=false&share=false&height=21&appId=599411893573946" width="92" height="21" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-            <iframe src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fntustudents.org%2F&layout=button&mobile_iframe=true&appId=599411893573946&width=58&height=21" width="58" height="21" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+            <iframe src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fweather.ntustudents.org%2F&layout=button&mobile_iframe=true&appId=599411893573946&width=58&height=21" width="58" height="21" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
         </div>
         <div class="meta">
             第 28 屆<a href="https://www.facebook.com/NTUWelfare" rel="external nofollow">國立臺灣大學學生會福利部</a>
