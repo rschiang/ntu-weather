@@ -5,7 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="http://overpass-30e2.kxcdn.com/overpass.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css" />
+
     <title>天氣 – 國立臺灣大學, 台灣</title>
+    <meta name="description" content="究竟公館現在有沒有在下雨呢？臺大即時氣象資訊（氣溫、風向、氣壓、降雨），讓第 28 屆臺大學生會福利部告訴你！" />
+    <meta property="og:site_name" content="臺大學生會" />
+    <meta property="og:title" content="國立臺灣大學, 台灣 — NTUSA 氣象" />
+    <meta property="og:image" content="https://sparks.ntustudents.org/wp-content/uploads/2015/11/11088549_1652198295008976_5229878804731284088_n-870x418.jpg" />
+    <meta property="og:url" content="http://weather.ntustudents.org" />
+
 
     <style type="text/css">
         * {
@@ -155,12 +162,20 @@
     </header>
     <section class="weather">
         <div class="section">
-% if error:
-            <h3>資訊暫時無法使用。</h3>
-% else:
             <h3>國立臺灣大學, 台灣</h3>
+% if error:
             <div class="temperature">
-                <span class="current">{{ value(temperature) }}</span>
+                <span class="current">--</span>
+                <span class="unit">--</span>
+            </div>
+            <div class="dashboard">
+                <ul>
+                    <li>資訊暫時無法使用。</li>
+                </ul>
+            </div>
+% else:
+            <div class="temperature">
+                <span class="current">{{ value(temperature, default='--') }}</span>
                 <span class="unit">°C</span>
             </div>
             <div class="dashboard">
@@ -173,10 +188,10 @@
                     <li>本日降雨 <em>{{ value(rain_day, 1) }} mm</em></li>
                 </ul>
             </div>
-% end
             <div class="source">
-                資料來源：國立臺灣大學中尺度暨地形降水研究室
+                資料來源：{{ provider }}
             </div>
+% end
         </div>
     </section>
     <footer class="section">
