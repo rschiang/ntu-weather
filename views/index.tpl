@@ -123,9 +123,14 @@
         ga('send', 'pageview');
     </script>
 <%
-    def round(text, digits=0, default='N/A'):
+    def value(text, digits=0, default='N/A'):
         try:
-            return round(float(text), digits)
+            float_value = float(text)
+            if digits < 1:
+                return round(float_value)
+            else:
+                return round(float_value, digits)
+            end
         except ValueError:
             return default
         end
@@ -138,21 +143,21 @@
     </header>
     <section class="weather">
         <div class="section">
-% if error
+% if error:
             <h3>資訊暫時無法使用。</h3>
-% else
+% else:
             <div class="temperature">
-                <span class="current">{{ round(temperature) }}</span>
+                <span class="current">{{ value(temperature) }}</span>
                 <span class="unit">°C</span>
             </div>
             <div class="dashboard">
                 <ul>
-                    <li>本日氣溫 <em>{{ round(temp_min) }} – {{ round(temp_max) }} °C</em></li>
-                    <li>風向 <span class="wind" style="transform: rotate({{ round(wind_direction, 1) - 90 }}deg)">➤</span> <em>{{ round(wind_speed) }} m/s</em></li>
-                    <li>氣壓 <em>{{ round(pressure, 1) }} hPa</em></li>
-                    <li>降雨強度 <em>{{ round(rain, 1) }} mm/h</em></li>
-                    <li>濕度 <em>{{ round(humidity, 1) }}%</em></li>
-                    <li>本日降雨 <em>{{ round(rain_day, 1) }} mm</em></li>
+                    <li>本日氣溫 <em>{{ value(temp_min) }} – {{ value(temp_max) }} °C</em></li>
+                    <li>風向 <span class="wind" style="transform: rotate({{ value(wind_direction, 1) - 90 }}deg)">➤</span> <em>{{ value(wind_speed) }} m/s</em></li>
+                    <li>氣壓 <em>{{ value(pressure, 1) }} hPa</em></li>
+                    <li>降雨強度 <em>{{ value(rain, 1) }} mm/h</em></li>
+                    <li>濕度 <em>{{ value(humidity, 1) }}%</em></li>
+                    <li>本日降雨 <em>{{ value(rain_day, 1) }} mm</em></li>
                 </ul>
             </div>
 % end

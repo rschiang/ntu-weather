@@ -1,6 +1,7 @@
+#!/usr/bin/env python3
 import os
 import weather
-from bottle import Bottle
+from bottle import Bottle, view
 
 app = Bottle()
 debug_switch = (os.environ.get('DEBUG') == '1')
@@ -8,7 +9,10 @@ debug_switch = (os.environ.get('DEBUG') == '1')
 @app.route('/')
 @view('index')
 def index():
-    return fetch_api()
+    weather_dict = fetch_api()
+    if 'error' not in weather_dict:
+        weather_dict['error'] = False
+    return weather_dict
 
 @app.route('/api')
 def api():
