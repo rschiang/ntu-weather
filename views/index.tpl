@@ -163,7 +163,7 @@
     <section class="weather">
         <div class="section">
             <h3>國立臺灣大學, 台灣</h3>
-% if error:
+% if defined('error'):
             <div class="temperature">
                 <span class="current">--</span>
                 <span class="unit">--</span>

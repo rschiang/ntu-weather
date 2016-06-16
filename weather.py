@@ -4,6 +4,7 @@ import json
 import requests
 import re
 from colorama import Fore, Style
+from datetime import datetime
 from sys import stderr
 
 def fetch():
