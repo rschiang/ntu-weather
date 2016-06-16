@@ -189,7 +189,7 @@
                 </ul>
             </div>
             <div class="source">
-                資料來源：{{ provider }}
+                資料來源：{{ provider }}（最後更新：{{ date.strftime('%m/%d %H:%M') }}）
             </div>
 % end
         </div>
