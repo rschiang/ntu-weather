@@ -46,7 +46,7 @@
         }
 
         .weather {
-            background: #61a4b3 url('https://c2.staticflickr.com/8/7356/9144879696_a0e9305430_h.jpg') center / cover;
+            background: #61a4b3 url('https://rschiang.github.io/ntu-weather/assets/cloud.jpg') center / cover;
             color: rgba(255, 255, 255, .95);
             text-shadow: rgba(0, 0, 0, .1) 0 0 5px;
         }
