@@ -2,4 +2,5 @@ bottle==0.12.9
 bottle-mongo==0.3.0
 colorama==0.3.7
 gunicorn==19.6.0
+pytz==2016.4
 requests==2.10.0
