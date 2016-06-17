@@ -12,7 +12,7 @@ debug_switch = (os.environ.get('DEBUG') == '1')
 tz = timezone('Asia/Taipei')
 
 # Configure database
-mongo_plugin = MongoPlugin(uri=os.environ.get('MONGODB_URI'), db='', keyword='mongo')
+mongo_plugin = MongoPlugin(uri=os.environ.get('MONGODB_URI'), db='', keyword='mongo', tz_aware=True)
 app.install(mongo_plugin)
 
 @app.route('/', template='index')
@@ -36,8 +36,9 @@ def get_cached(mongo, timeout=600):
 
     if last_doc:
         now_date = datetime.now(tz)
-        last_date = tz.localize(last_doc['date'])
+        last_date = last_doc['date'].astimezone(tz)
         if (now_date - last_date).total_seconds() < timeout:
+            last_doc['date'] = last_date
             return last_doc
 
     return None
