@@ -32,29 +32,16 @@
         end
     end
 
-    def dec_value(text, default='N/A'):
-        try:
-            float_value = round(float(text), 1)
-            if float_value < 0.1:
-                return 0
-            else:
-                return float_value
-            end
-        except ValueError:
-            return default
-        end
-    end
-
-    def unit_value(text, fmt, zero):
+    def dec_value(text, zero=0, default='N/A'):
         try:
             float_value = round(float(text), 1)
             if float_value < 0.1:
                 return zero
             else:
-                return fmt.format(float_value)
+                return float_value
             end
         except ValueError:
-            return '無資料'
+            return default
         end
     end
 %>
@@ -86,9 +73,9 @@
                     <li>本日氣溫 <em>{{ value(temp_min) }} – {{ value(temp_max) }} °C</em></li>
                     <li>風向 <span class="wind" style="transform: rotate({{ dec_value(wind_direction, default=0) - 90 }}deg)">➤</span> <em>{{ dec_value(wind_speed) }} m/s</em></li>
                     <li>氣壓 <em>{{ dec_value(pressure) }} hPa</em></li>
-                    <li>降雨強度 <em>{{ unit_value(rain, '{} mm/h', '無降雨') }}</em></li>
+                    <li>降雨強度 <em>{{ dec_value(rain) }} mm/h</em></li>
                     <li>濕度 <em>{{ dec_value(humidity) }}%</em></li>
-                    <li>本日降雨 <em>{{ unit_value(rain_day, '{} mm', '無降雨') }}</em></li>
+                    <li>本日降雨 <em>{{ dec_value(rain_day) }} mm</em></li>
                 </ul>
             </div>
             <div class="chart">
