@@ -35,6 +35,15 @@ html, body {
     text-shadow: rgba(0, 0, 0, .1) 0 0 5px;
 }
 
+.weather.rainy {
+    background-color: #4d5360;
+    background-image: url('https://rschiang.github.io/ntu-weather/assets/rainy.jpg');
+}
+
+.weather.skies {
+    background-image: url('https://rschiang.github.io/ntu-weather/assets/skies.jpg');
+}
+
 .weather .section {
     min-height: 30rem;
     position: relative;
