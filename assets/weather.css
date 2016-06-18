@@ -26,6 +26,7 @@ html, body {
 .logo {
     width: 20rem;
     height: auto;
+    max-width: 80%;
 }
 
 .weather {
@@ -93,6 +94,7 @@ html, body {
 
 .chart {
     margin: 1rem 0;
+    clear: both;
 }
 
 .chart .ct-chart {
