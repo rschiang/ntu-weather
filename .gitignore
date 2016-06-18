@@ -1,5 +1,6 @@
 __pycache__/
 venv/
 example/
+assets/
 .DS_Store
 .env
