@@ -4,7 +4,7 @@ import pymongo
 import weather
 from bottle import Bottle, view
 from bottle_mongo import MongoPlugin
-from datetime import datetime
+from datetime import datetime, timedelta
 from pytz import timezone
 
 app = Bottle()
@@ -20,6 +20,7 @@ def index(mongo):
     last_doc = get_cached(mongo, timeout=900)
     if not last_doc:
         last_doc = fetch_and_cache(mongo)
+    last_doc['daily'] = aggregate_daily(mongo, datetime.now(tz))
     return last_doc
 
 @app.route('/api')
@@ -31,8 +32,7 @@ def api(mongo):
     return last_doc
 
 def get_cached(mongo, timeout=600):
-    all_weather = mongo['weather']
-    last_doc = all_weather.find_one(sort=[('date', pymongo.DESCENDING)], projection={'_id': False})
+    last_doc = get_one(mongo)
 
     if last_doc:
         now_date = datetime.now(tz)
@@ -62,6 +62,20 @@ def fetch_api():
         return weather_dict
     except Exception:
         return {'error': 'data_unavailable'}
+
+def get_one(mongo, filters=None):
+    all_weather = mongo['weather']
+    return all_weather.find_one(filters, sort=[('date', pymongo.DESCENDING)], projection={'_id': False})
+
+def aggregate_daily(mongo, date):
+    doc_list = []
+    for i in range(8):
+        date -= timedelta(hours=3)
+        doc = get_one(mongo, {'date': { '$lte': date }})
+        if not doc:
+            doc = {'date': date, 'error': 'data_unavailable' }
+        doc_list.append(doc)
+    return reversed(doc_list)
 
 if __name__ == '__main__':
     app.run(debug=debug_switch, reloader=debug_switch)

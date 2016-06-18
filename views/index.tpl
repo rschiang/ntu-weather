@@ -3,10 +3,10 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="https://rschiang.github.io/ntu-weather/assets/weather.css">
     <link rel="stylesheet" href="http://overpass-30e2.kxcdn.com/overpass.css" />
     <link rel="stylesheet" href="https://rschiang.github.io/ntu-weather/assets/normalize.min.css" />
-    <link rel="stylesheet" href="https://rschiang.github.io/ntu-weather/assets/chartist.min.css">
+    <link rel="stylesheet" href="https://rschiang.github.io/ntu-weather/assets/chartist.min.css" />
+    <link rel="stylesheet" href="https://rschiang.github.io/ntu-weather/assets/weather.css" />
     <script src="https://rschiang.github.io/ntu-weather/assets/chartist.min.js"></script>
     <script src="https://rschiang.github.io/ntu-weather/assets/chartist-plugin-pointlabels.min.js"></script>
 
@@ -69,6 +69,9 @@
                     <li>本日降雨 <em>{{ value(rain_day, 1) }} mm</em></li>
                 </ul>
             </div>
+            <div class="chart">
+                <div class="ct-chart" id="daily-chart"></div>
+            </div>
             <div class="source">
                 資料來源：{{ provider }}（最後更新：{{ date.strftime('%m/%d %H:%M') }}）
             </div>
@@ -86,5 +89,43 @@
             National Taiwan University Student Association, 2016
         </div>
     </footer>
+
+<%
+    labels = []
+    series = []
+    for data in daily:
+        pm = data['date'].hour >= 12
+        hour = data['date'].hour % 12
+        if hour == 0:
+            labels.append('12pm' if pm else '12am')
+        else:
+            labels.append('"{}{}"'.format(hour, 'pm' if pm else 'am'))
+        end
+
+        if not 'error' in data:
+            series.append(str(value(data['temperature'])))
+        else:
+            series.append('NaN')
+        end
+    end
+%>
+    <script>
+        var data = {
+            labels: [ {{! ', '.join(labels) }} ],
+            series: [
+                [ {{! ', '.join(series) }} ]
+            ]
+        };
+
+        var options = {
+            axisX: { labelOffset: { x: -15, y: 0 } },
+            axisY: { showLabel: false, showGrid: false },
+            fullWidth: true, high: 40, low: 0,
+            plugins: [ Chartist.plugins.ctPointLabels({ labelClass: 'ct-datalabel' })],
+            showArea: true,
+        };
+
+        new Chartist.Line('#daily-chart', data, options);
+    </script>
 </body>
 </html>
