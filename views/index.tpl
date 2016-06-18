@@ -23,13 +23,22 @@
         ga('send', 'pageview');
     </script>
 <%
-    def value(text, digits=0, default='N/A'):
+    def value(text, default='N/A'):
         try:
             float_value = float(text)
-            if digits < 1:
-                return round(float_value)
+            return round(float_value)
+        except ValueError:
+            return default
+        end
+    end
+
+    def dec_value(text, zero=0, default='N/A'):
+        try:
+            float_value = round(float(text), 1)
+            if float_value < 0.1:
+                return zero
             else:
-                return round(float_value, digits)
+                return float_value
             end
         except ValueError:
             return default
@@ -62,11 +71,11 @@
             <div class="dashboard">
                 <ul>
                     <li>本日氣溫 <em>{{ value(temp_min) }} – {{ value(temp_max) }} °C</em></li>
-                    <li>風向 <span class="wind" style="transform: rotate({{ value(wind_direction, 1) - 90 }}deg)">➤</span> <em>{{ value(wind_speed, 1) }} m/s</em></li>
-                    <li>氣壓 <em>{{ value(pressure, 1) }} hPa</em></li>
-                    <li>降雨強度 <em>{{ value(rain, 1) }} mm/h</em></li>
-                    <li>濕度 <em>{{ value(humidity, 1) }}%</em></li>
-                    <li>本日降雨 <em>{{ value(rain_day, 1) }} mm</em></li>
+                    <li>風向 <span class="wind" style="transform: rotate({{ dec_value(wind_direction, default=0) - 90 }}deg)">➤</span> <em>{{ dec_value(wind_speed) }} m/s</em></li>
+                    <li>氣壓 <em>{{ dec_value(pressure) }} hPa</em></li>
+                    <li>降雨強度 <em>{{ dec_value(rain) }} mm/h</em></li>
+                    <li>濕度 <em>{{ dec_value(humidity) }}%</em></li>
+                    <li>本日降雨 <em>{{ dec_value(rain_day) }} mm</em></li>
                 </ul>
             </div>
             <div class="chart">
@@ -97,7 +106,7 @@
         pm = data['date'].hour >= 12
         hour = data['date'].hour % 12
         if hour == 0:
-            labels.append('12pm' if pm else '12am')
+            labels.append('"12pm"' if pm else '"12am"')
         else:
             labels.append('"{}{}"'.format(hour, 'pm' if pm else 'am'))
         end
