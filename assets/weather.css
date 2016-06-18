@@ -74,7 +74,7 @@ html, body {
 
 .dashboard li {
     display: inline-block;
-    width: 48%;
+    width: 90%;
 }
 
 .dashboard ul em {
@@ -143,20 +143,40 @@ html, body {
 footer {
     font-size: .75rem;
     font-weight: 600;
+    text-align: center;
 }
 
 .hide {
     color: #777;
-    opacity: 0;
+    display: inline-block;
     transition: opacity .2s ease;
 }
 
-.section:hover .hide {
-    opacity: 1;
-}
+@media screen and (min-width: 32em) {
+    .dashboard li {
+        width: 48%;
+    }
 
-footer .social {
-    float: right;
-    text-align: right;
-    width: 200px;
+    .chart {
+        margin-bottom: 1rem;
+    }
+
+    footer .social {
+        float: right;
+        text-align: right;
+        width: 200px;
+    }
+
+    .meta {
+        text-align: left;
+    }
+
+    .hide {
+        display: inline;
+        opacity: 0;
+    }
+
+    .section:hover .hide {
+        opacity: 1;
+    }
 }
