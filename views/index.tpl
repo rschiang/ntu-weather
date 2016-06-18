@@ -3,140 +3,20 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://rschiang.github.io/ntu-weather/assets/weather.css">
     <link rel="stylesheet" href="http://overpass-30e2.kxcdn.com/overpass.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
-    <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+    <link rel="stylesheet" href="https://rschiang.github.io/ntu-weather/assets/normalize.min.css" />
+    <link rel="stylesheet" href="https://rschiang.github.io/ntu-weather/assets/chartist.min.css">
+    <script src="https://rschiang.github.io/ntu-weather/assets/chartist.min.js"></script>
+    <script src="https://rschiang.github.io/ntu-weather/assets/chartist-plugin-pointlabels.min.js"></script>
 
     <title>天氣 – 國立臺灣大學, 台灣</title>
     <meta name="description" content="究竟公館現在有沒有在下雨呢？臺大即時氣象資訊（氣溫、風向、氣壓、降雨），讓第 28 屆臺大學生會福利部告訴你！" />
     <meta property="og:site_name" content="臺大學生會" />
     <meta property="og:title" content="國立臺灣大學, 台灣 — NTUSA 氣象" />
-    <meta property="og:image" content="https://sparks.ntustudents.org/wp-content/uploads/2015/11/11088549_1652198295008976_5229878804731284088_n-870x418.jpg" />
+    <meta property="og:image" content="https://rschiang.github.io/ntu-weather/assets/social.jpg" />
     <meta property="og:url" content="http://weather.ntustudents.org" />
 
-    <style type="text/css">
-        * {
-            box-sizing: border-box;
-        }
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        a:hover, a:active {
-            color: #777;
-        }
-
-        html, body {
-            background: #f9f9f9;
-            color: #2b2b2b;
-            font-family: Overpass, 'Pingfang TC', 'Source Han Sans TW', 'Microsoft Jhenghei', sans-serif;
-        }
-
-        .section {
-            max-width: 62rem;
-            margin: auto;
-            padding: 1rem 1rem;
-        }
-
-        .logo {
-            width: 20rem;
-            height: auto;
-        }
-
-        .weather {
-            background: #61a4b3 url('https://rschiang.github.io/ntu-weather/assets/cloud.jpg') center / cover;
-            color: rgba(255, 255, 255, .95);
-            text-shadow: rgba(0, 0, 0, .1) 0 0 5px;
-        }
-
-        .weather .section {
-            min-height: 30rem;
-            position: relative;
-        }
-
-        .weather h3 {
-            font-weight: inherit;
-            margin: 0;
-
-        }
-
-        .temperature span {
-            display: inline-block;
-        }
-
-        .temperature .current {
-            font-size: 8rem;
-            line-height: 10rem;
-        }
-
-        .temperature .unit {
-            font-size: 3rem;
-            font-weight: 200;
-            padding-top: 1.15rem;
-            vertical-align: top;
-        }
-
-        .dashboard ul {
-            color: rgba(255, 255, 255, .6);
-            letter-spacing: 0.05rem;
-            list-style: none;
-            font-size: .875rem;
-            margin: 0;
-            max-width: 24rem;
-            padding: 0;
-        }
-
-        .dashboard li {
-            display: inline-block;
-            width: 48%;
-        }
-
-        .dashboard ul em {
-            color: white;
-            font-style: normal;
-            font-weight: 500;
-        }
-
-        .dashboard .wind {
-            color: white;
-            display: inline-block;
-            margin: 0 .25rem;
-            text-align: center;
-            width: 1em;
-            vertical-align: middle;
-        }
-
-        .source {
-            bottom: 1rem;
-            color: rgba(255, 255, 255, .5);
-            font-size: .75rem;
-            position: absolute;
-        }
-
-        footer {
-            font-size: .75rem;
-            font-weight: 600;
-        }
-
-        .hide {
-            color: #777;
-            opacity: 0;
-            transition: opacity .2s ease;
-        }
-
-        .section:hover .hide {
-            opacity: 1;
-        }
-
-        footer .social {
-            float: right;
-            text-align: right;
-            width: 200px;
-        }
-    </style>
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
         ga('create', 'UA-79166280-1', 'auto');
@@ -159,7 +39,7 @@
 </head>
 <body>
     <header class="section">
-        <img alt="國立臺灣大學學生會" class="vendor logo" src="http://rschiang.github.io/student-weekly-themes/assets/logo.png" />
+        <img alt="國立臺灣大學學生會" class="vendor logo" src="http://rschiang.github.io/ntu-weather/assets/logo.png" />
     </header>
     <section class="weather">
         <div class="section">
