@@ -32,11 +32,11 @@
         end
     end
 
-    def dec_value(text, zero=0, default='N/A'):
+    def dec_value(text, default='N/A'):
         try:
             float_value = round(float(text), 1)
             if float_value < 0.1:
-                return zero
+                return 0
             else:
                 return float_value
             end
