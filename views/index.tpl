@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="http://overpass-30e2.kxcdn.com/overpass.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
 
     <title>天氣 – 國立臺灣大學, 台灣</title>
     <meta name="description" content="究竟公館現在有沒有在下雨呢？臺大即時氣象資訊（氣溫、風向、氣壓、降雨），讓第 28 屆臺大學生會福利部告訴你！" />
@@ -12,7 +14,6 @@
     <meta property="og:title" content="國立臺灣大學, 台灣 — NTUSA 氣象" />
     <meta property="og:image" content="https://sparks.ntustudents.org/wp-content/uploads/2015/11/11088549_1652198295008976_5229878804731284088_n-870x418.jpg" />
     <meta property="og:url" content="http://weather.ntustudents.org" />
-
 
     <style type="text/css">
         * {

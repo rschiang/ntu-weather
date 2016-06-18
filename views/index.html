@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="http://overpass-30e2.kxcdn.com/overpass.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+    <script src="../assets/chartist-plugin-pointlabels.min.js"></script>
+
     <title>天氣 – 國立臺灣大學, 台灣</title>
 
     <style type="text/css">
@@ -39,13 +43,14 @@
         }
 
         .weather {
-            background: #61a4b3 url('../assets/cloud.jpg') center / cover;
+            background: #61a4b3 url('https://rschiang.github.io/ntu-weather/assets/cloud.jpg') center / cover;
             color: rgba(255, 255, 255, .95);
             text-shadow: rgba(0, 0, 0, .1) 0 0 5px;
         }
 
         .weather .section {
             min-height: 30rem;
+            position: relative;
         }
 
         .weather h3 {
@@ -60,25 +65,35 @@
 
         .temperature .current {
             font-size: 8rem;
-            letter-spacing: -.4rem;
+            line-height: 10rem;
         }
 
         .temperature .unit {
             font-size: 3rem;
-            padding-top: 2rem;
+            font-weight: 200;
+            padding-top: 1.15rem;
             vertical-align: top;
         }
 
         .dashboard ul {
             color: rgba(255, 255, 255, .6);
+            letter-spacing: 0.05rem;
             list-style: none;
+            font-size: .875rem;
             margin: 0;
+            max-width: 24rem;
             padding: 0;
+        }
+
+        .dashboard li {
+            display: inline-block;
+            width: 48%;
         }
 
         .dashboard ul em {
             color: white;
             font-style: normal;
+            font-weight: 500;
         }
 
         .dashboard .wind {
@@ -86,14 +101,55 @@
             display: inline-block;
             margin: 0 .25rem;
             text-align: center;
-            width: 1rem;
+            width: 1em;
             vertical-align: middle;
         }
 
+        .chart {
+            margin: 1rem 0;
+        }
+
+        .chart .ct-chart {
+            height: 12rem;
+        }
+
+        .chart .ct-line {
+            stroke: rgba(255, 255, 255, .3);
+            stroke-width: 1px;
+        }
+
+        .chart .ct-point {
+            stroke: rgba(255, 255, 255, .6);
+            stroke-width: 6px;
+        }
+
+        .chart .ct-area {
+            fill: white;
+        }
+
+        .chart .ct-grid {
+            stroke: rgba(255, 255, 255, .2);
+        }
+
+        .chart .ct-label {
+            color: rgba(255, 255, 255, .6);
+        }
+
+        .chart .ct-datalabel {
+            fill: rgba(255, 255, 255, .85);
+            font-size: 1.15rem;
+            font-weight: 200;
+        }
+
+        .chart .ct-datalabel:after {
+            content: "°";
+        }
+
         .source {
+            bottom: 1rem;
             color: rgba(255, 255, 255, .5);
-            padding-top: 5rem;
             font-size: .75rem;
+            position: absolute;
         }
 
         footer {
@@ -143,6 +199,11 @@
                     <li>本日降雨 <em>0 mm</em></li>
                 </ul>
             </div>
+            <div class="chart">
+                <div class="ct-chart" id="daily-chart">
+
+                </div>
+            </div>
             <div class="source">
                 資料來源：國立臺灣大學中尺度暨地形降水研究室
             </div>
@@ -159,5 +220,32 @@
             National Taiwan University Student Association, 2016
         </div>
     </footer>
+    <script>
+        var data = {
+            labels: ['3pm', '6pm', '9pm', '12am', '3am', '6am', '9am', '12pm'],
+            series: [
+                [30, 28, 27, 27, 26, 30, 33, 32]
+            ]
+        };
+
+        var options = {
+            axisX: {
+                labelOffset: { x: -15, y: 0 },
+            },
+            axisY: {
+                showLabel: false,
+                showGrid: false
+            },
+            fullWidth: true,
+            high: 40,
+            low: 0,
+            plugins: [
+                Chartist.plugins.ctPointLabels({ labelClass: 'ct-datalabel' })
+            ],
+            showArea: true,
+        };
+
+        new Chartist.Line('#daily-chart', data, options);
+    </script>
 </body>
 </html>
