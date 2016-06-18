@@ -74,6 +74,8 @@ def aggregate_daily(mongo, date):
         doc = get_one(mongo, {'date': { '$lte': date }})
         if not doc:
             doc = {'date': date, 'error': 'data_unavailable' }
+        else:
+            doc['date'] = doc['date'].astimezone(tz)
         doc_list.append(doc)
     return reversed(doc_list)
 
