@@ -58,7 +58,7 @@
 
         if rain > 0:
             weather_type = 'rainy'
-        elif humidity < 75 and rain_day < 0:
+        elif humidity < 75 and rain_day <= 0:
             weather_type = 'skies'
         else:
             weather_type = ''
