@@ -115,13 +115,19 @@ html, body {
 }
 
 .chart .ct-line {
-    stroke: rgba(255, 255, 255, .3);
+    stroke: rgba(204, 226, 231, .3);
     stroke-width: 1px;
 }
 
 .chart .ct-point {
-    stroke: rgba(255, 255, 255, .6);
-    stroke-width: 6px;
+    stroke: rgba(204, 226, 231, .6);
+    stroke-width: 3px;
+}
+
+.chart .ct-datalabel {
+    fill: rgba(204, 226, 231, 0.85);
+    font-size: .85rem;
+    font-weight: 200;
 }
 
 .chart .ct-area {
@@ -136,14 +142,18 @@ html, body {
     color: rgba(255, 255, 255, .6);
 }
 
-.chart .ct-datalabel {
-    fill: rgba(255, 255, 255, .85);
-    font-size: 1.15rem;
-    font-weight: 200;
+.chart .primary .ct-line {
+    stroke: rgba(255, 255, 255, .3);
 }
 
-.chart .ct-datalabel:after {
-    content: "°";
+.chart .primary .ct-point {
+    stroke: rgba(255, 255, 255, .6);
+    stroke-width: 6px;
+}
+
+.chart .primary .ct-datalabel {
+    fill: rgba(255, 255, 255, .85);
+    font-size: 1.15rem;
 }
 
 .source {
