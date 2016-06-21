@@ -102,12 +102,16 @@ html, body {
 }
 
 .chart {
-    margin: 1rem 0 2rem;
     clear: both;
+    height: 12rem;
+    margin: 1rem 0 2rem;
+    position: relative;
 }
 
 .chart .ct-chart {
-    height: 12rem;
+    height: 100%;
+    position: absolute;
+    width: 100%;
 }
 
 .chart .ct-line {
