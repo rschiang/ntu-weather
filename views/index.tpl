@@ -96,7 +96,8 @@
                 </ul>
             </div>
             <div class="chart">
-                <div class="ct-chart" id="daily-chart"></div>
+                <div class="ct-chart primary" id="daily-chart"></div>
+                <div class="ct-chart secondary" id="humid-chart"></div>
             </div>
             <div class="source">
                 資料來源：{{ provider }}（最後更新：{{ date.strftime('%m/%d %H:%M') }}）
@@ -115,10 +116,10 @@
             National Taiwan University Student Association, 2016
         </div>
     </footer>
-
+% if not defined('error'):
 <%
     labels = []
-    series = []
+    temperatures, humidities = [], []
     for data in daily:
         pm = data['date'].hour >= 12
         hour = data['date'].hour % 12
@@ -129,29 +130,59 @@
         end
 
         if not 'error' in data:
-            series.append(str(value(data['temperature'])))
+            temperatures.append(str(value(data['temperature'])))
+            humidities.append(str(value(data['humidity'])))
         else:
-            series.append('NaN')
+            temperatures.append('NaN')
+            humidities.append('NaN')
         end
     end
 %>
     <script>
-        var data = {
-            labels: [ {{! ', '.join(labels) }} ],
-            series: [
-                [ {{! ', '.join(series) }} ]
-            ]
-        };
+        (function() {
+            var data = {
+                labels: [ {{! ', '.join(labels) }} ],
+                series: [[ {{! ', '.join(temperatures) }} ]]
+            };
 
-        var options = {
-            axisX: { labelOffset: { x: -15, y: 0 } },
-            axisY: { showLabel: false, showGrid: false },
-            fullWidth: true, high: 40, low: 0,
-            plugins: [ Chartist.plugins.ctPointLabels({ labelClass: 'ct-datalabel' })],
-            showArea: true,
-        };
+            var options = {
+                axisX: { labelOffset: { x: -15, y: 0 } },
+                axisY: { showLabel: false, showGrid: false },
+                chartPadding: { top: 15, right: 15, bottom: 5, left: -21 },
+                fullWidth: true, high: 40, low: 0,
+                plugins: [
+                    Chartist.plugins.ctPointLabels({
+                        labelClass: 'ct-datalabel',
+                        labelInterpolationFnc: function(x) { return x + '°' }
+                    })
+                ],
+                showArea: true,
+            };
 
-        new Chartist.Line('#daily-chart', data, options);
+            return new Chartist.Line('#daily-chart', data, options);
+        })();
+
+        (function() {
+            var data = {
+                series: [[ {{! ', '.join(humidities) }} ]]
+            };
+
+            var options = {
+                axisX: { showLabel: false, showGrid: false },
+                axisY: { showLabel: false, showGrid: false },
+                chartPadding: { top: 96, right: 15, bottom: 5, left: -21 },
+                fullWidth: true,
+                plugins: [
+                    Chartist.plugins.ctPointLabels({
+                        labelClass: 'ct-datalabel',
+                        labelInterpolationFnc: function(x) { return x + '%'; }
+                    })
+                ],
+            };
+
+            return new Chartist.Line('#humid-chart', data, options);
+        })();
     </script>
+% end
 </body>
 </html>
