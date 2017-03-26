@@ -26,7 +26,7 @@ def print_err(text, color=Style.RESET_ALL, bright=False):
     stderr.write('\n')
 
 def parse(text):
-    date = search_one(r'觀測時間：\s*(\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})', text)
+    date = search_one(r'觀測時間\s*:</td>\s*<td[^>]+>(\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})', text)
     if not date:
         print_err('ERR: Cannot find observing time. Check service availability.', Fore.RED, bright=True)
         print_err('Original string:')
@@ -36,16 +36,16 @@ def parse(text):
 
     return {
         'date': date,
-        'temperature': search_one(r'溫度：\s*([\d\.]+)&nbsp;', text),      # (˚C)
-        'pressure': search_one(r'氣壓：\s*([\d\.]+)&nbsp;', text),         # (hPa)
-        'humidity': search_one(r'相對濕度：\s*([\d\.]+)&nbsp;', text),      # (%)
-        'wind_speed': search_one(r'風速：\s*([\d\.]+)&nbsp;', text),       # (m/s)
-        'wind_direction': search_one(r'風向：\s*([\d\.]+)&nbsp;', text),   # (˚)
-        'rain': search_one(r'降雨強度：\s*([\d\.]+)&nbsp;', text),          # (mm/h)
+        'temperature': search_one(r'溫度\s*:</td>\s*<td[^>]+>\s*([\d\.]+)&nbsp;', text),      # (˚C)
+        'pressure': search_one(r'氣壓\s*:</td>\s*<td[^>]+>\s*([\d\.]+)&nbsp;', text),         # (hPa)
+        'humidity': search_one(r'相對濕度\s*:</td>\s*<td[^>]+>\s*([\d\.]+)&nbsp;', text),      # (%)
+        'wind_speed': search_one(r'風速\s*:</td>\s*<td[^>]+>\s*([\d\.]+)&nbsp;', text),       # (m/s)
+        'wind_direction': search_one(r'風向\s*:</td>\s*<td[^>]+>\s*([\d\.]+)&nbsp;', text),   # (˚)
+        'rain': search_one(r'降雨強度\s*:</td>\s*<td[^>]+>\s*([\d\.]+)&nbsp;', text),          # (mm/h)
 
-        'temp_max': search_one(r'本日最高溫：\s*([\d\.]+)℃', text),         # (˚C)
-        'temp_min': search_one(r'本日最低溫：\s*([\d\.]+)℃', text),         # (˚C)
-        'rain_day': search_one(r'本日降雨量：\s*([\d\.]+)mm', text),        # (mm)
+        'temp_max': search_one(r'本日最高溫\s*:</td>\s*<td[^>]+>\s*([\d\.]+)\s*<', text),         # (˚C)
+        'temp_min': search_one(r'本日最低溫\s*:</td>\s*<td[^>]+>\s*([\d\.]+)\s*<', text),         # (˚C)
+        'rain_day': search_one(r'本日降雨量\s*:</td>\s*<td[^>]+>\s*([\d\.]+)\s*<', text),        # (mm)
 
         'provider': '國立臺灣大學中尺度暨地形降水研究室',
     }
