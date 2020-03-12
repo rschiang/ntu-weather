@@ -54,7 +54,7 @@
     if not defined('error'):
         humidity = dec_value(humidity)
         rain = dec_value(rain)
-        rain_day = dec_value(rain_day)
+        rain_day = sum(dec_value(data['rain']) for data in daily)
 
         if rain > 0:
             weather_type = 'rainy'
@@ -69,7 +69,7 @@
 %>
     <section class="weather {{ weather_type }}">
         <div class="section">
-            <h3>國立臺灣大學, 台灣</h3>
+            <h3>國立臺灣大學，台灣</h3>
 % if defined('error'):
             <div class="temperature">
                 <span class="current">--</span>
@@ -87,12 +87,11 @@
             </div>
             <div class="dashboard">
                 <ul>
-                    <li>本日氣溫 <em>{{ value(temp_min) }} – {{ value(temp_max) }} °C</em></li>
+                    <li>地表氣溫 <em>{{ value(temp_ground) }} °C</em></li>
                     <li>風向 <span class="wind" style="transform: rotate({{ dec_value(wind_direction, default=0) - 90 }}deg)">➤</span> <em>{{ dec_value(wind_speed) }} m/s</em></li>
                     <li>氣壓 <em>{{ dec_value(pressure) }} hPa</em></li>
                     <li>降雨強度 <em>{{ rain }} mm/h</em></li>
                     <li>濕度 <em>{{ humidity }}%</em></li>
-                    <li>本日降雨 <em>{{ rain_day }} mm</em></li>
                 </ul>
             </div>
             <div class="chart">

@@ -58,7 +58,7 @@ def fetch_api():
         return {'error': 'server_unavailable'}
     try:
         weather_dict = weather.parse(response_text)
-        weather_dict['date'] = tz.localize(datetime.strptime(weather_dict['date'], '%Y/%m/%d %H:%M:%S'))
+        weather_dict['date'] = tz.localize(datetime.strptime(weather_dict['date'], '%Y-%m-%d %H:%M:%S'))
         return weather_dict
     except Exception:
         return {'error': 'data_unavailable'}
