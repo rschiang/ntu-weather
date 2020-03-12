@@ -1,6 +1,6 @@
-bottle==0.12.9
+bottle==0.12.18
 bottle-mongo==0.3.0
-colorama==0.3.7
-gunicorn==19.6.0
-pytz==2016.4
-requests==2.10.0
+colorama==0.4.3
+gunicorn==20.0.4
+pytz==2019.3
+requests==2.23.0
