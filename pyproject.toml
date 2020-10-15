@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "ntuweather"
+version = "0.1.0"
+description = "Weather information for NTU"
+authors = ["Poren Chiang <poren@poren.tw>"]
+repository = "https://github.com/rschiang/ntu-weather"
+license = "Apache-2.0"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+requests = "^2.24.0"
+
+[tool.poetry.dev-dependencies]
+bottle = "^0.12.18"
+colorama = "^0.4.4"
+gunicorn = "^20.0.4"
+
+[tool.poetry.scripts]
+ntuweather = 'ntuweather.weather:main'
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
