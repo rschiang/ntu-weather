@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
 import pymongo
-import weather
+import ntuweather
 from bottle import Bottle, view
 from bottle_mongo import MongoPlugin
 from datetime import datetime, timedelta

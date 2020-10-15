@@ -4,13 +4,14 @@
 台灣大學氣象 API Python 模組。
 
 ```
-python -m ntuweather.weather
+ntuweather  # Method 1
+python -m ntuweather.weather # Method 2
 ```
 
 授權
 ----
 
-本模組以 [Apache 2.0](LICENSE.md) 公眾授權釋出。
+本模組以 [Apache 2.0](./LICENSE) 公眾授權釋出。
 
 ```
 Copyright (C) Poren Chiang 2016–2020.
@@ -28,5 +29,5 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 
-線上 API 網站程式碼（`site/`），以 [GNU AGPL 3.0](site/LICENSE.md) 公眾授權釋出；
+線上 API 網站程式碼（`app/`），以 [GNU AGPL 3.0](site/LICENSE.md) 公眾授權釋出；
 單純使用 `ntuweather` 模組則不受影響。
