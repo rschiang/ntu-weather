@@ -6,5 +6,5 @@ from .exceptions import WeatherParseError
 
 def get():
     """Retrieves current weather information from the default provider."""
-    from .providers import NTUASProvider
-    return NTUASProvider().get()
+    from .providers import NTUSAProvider
+    return NTUSAProvider().get()

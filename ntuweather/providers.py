@@ -76,3 +76,33 @@ class NTUASProvider(Provider):
                 return float(string)
             except: pass
         raise WeatherParseError(text=self.text, arg=arg)
+
+
+class NTUSAProvider(Provider):
+    """Weather information provider from NTUSA weather relay."""
+
+    def __init__(self, url=None):
+        """Initialize NTUSA Provider, optionally with an alternative data feed."""
+        super().__init__(name='第28屆臺大學生會福利部')
+        self.url = url or 'http://weather.ntustudents.org/api'
+
+    def get(self):
+        """Acquire weather information from NTUSA weather relay."""
+
+        # Retrieve the information for the website
+        request = requests.get(self.url)
+        request.raise_for_status()
+
+        self.data = request.json()
+
+        return Weather(
+            date=datetime.fromisoformat(self.data['date']),
+            temperature=float(self.data['temperature']),
+            pressure=float(self.data['pressure']),
+            humidity=float(self.data['humidity']),
+            wind_speed=float(self.data['wind_speed']),
+            wind_direction=int(self.data['wind_direction']),
+            rain_per_hour=float(self.data['rain']),
+            rain_per_minute=float(self.data['rain_minute']),
+            ground_temperature=float(self.data['temp_ground']),
+            provider=self.data['provider'] or self.name)
