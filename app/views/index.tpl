@@ -57,7 +57,7 @@
             </div>
 % else:
             <div class="temperature">
-                <span class="current">{{ round(weather.temperature) }}</span>
+                <span class="current" title="{{weather.temperature}}°C">{{ round(weather.temperature) }}</span>
                 <span class="unit">°C</span>
             </div>
             <div class="dashboard">
@@ -82,9 +82,9 @@
     </section>
     <footer class="section">
         <div class="social">
-            <iframe src="https://ghbtns.com/github-btn.html?user=rschiang&repo=ntu-weather&type=fork&count=true" frameborder="0" scrolling="0" width="150" height="20" title="GitHub"></iframe>
-            <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2FNTUWelfare&width=92&layout=button_count&action=like&show_faces=false&share=false&height=21&appId=599411893573946" width="92" height="21" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-            <iframe src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fweather.ntustudents.org%2F&layout=button&mobile_iframe=true&appId=599411893573946&width=58&height=21" width="58" height="21" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+            <iframe src="https://ghbtns.com/github-btn.html?user=rschiang&repo=ntu-weather&type=fork&count=true" width="90" height="21"  style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" title="GitHub"></iframe>
+            <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2FNTUWelfare&width=92&layout=button_count&action=like&show_faces=false&share=false&height=21&appId=599411893573946" width="92" height="21" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" title="在 Facebook 上追蹤福利部"></iframe>
+            <iframe src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fweather.ntustudents.org%2F&layout=button&mobile_iframe=true&appId=599411893573946&width=58&height=21" width="58" height="21" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" title="為這頁說讚"></iframe>
         </div>
         <div class="meta">
             第 28 屆<a href="https://www.facebook.com/NTUWelfare" rel="external nofollow">國立臺灣大學學生會福利部</a>
