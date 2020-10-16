@@ -28,8 +28,11 @@ class WeatherData(Base):
         return f"<WeatherData(date='{self.date.isoformat()}', temperature={self.temperature})>"
 
     def weather(self):
-        self_dict = {field.name: self.__dict__[field.name] for field in dataclasses.fields(Weather)}
+        self_dict = {field.name: self.__dict__.get(field.name) for field in dataclasses.fields(Weather)}
+        return Weather(**self_dict)
 
     @classmethod
     def fromweather(cls, weather):
-        return cls(**dataclasses.asdict(weather))
+        fields = dataclasses.asdict(weather)
+        del fields['provider']  # We don’t store provider name as there would be only one.
+        return cls(**fields)

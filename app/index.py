@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
+# App logic for the interactive weather site
+# (C) Poren Chiang 2016–2020
+
+import bottle
 import os
-from bottle import Bottle
 from datetime import datetime, timedelta
 from ntuweather.providers import NTUASProvider
 from pytz import timezone
@@ -8,7 +11,9 @@ from sqlalchemy import func
 from .models import WeatherData
 from .utils import db_session, query_weather_data, today
 
-app = Bottle()
+bottle.TEMPLATE_PATH += ['./app/views/']
+
+app = bottle.Bottle()
 debug_switch = (os.environ.get('DEBUG') == '1')
 tz = timezone('Asia/Taipei')
 provider = NTUASProvider()
@@ -35,8 +40,10 @@ def index():
         }
 
     except ValueError:
+        if debug_switch: raise
         return {'error': 'data_unavailable'}
     except:
+        if debug_switch: raise
         return {'error': 'server_unavailable'}
 
 @app.route('/api')
@@ -59,23 +66,26 @@ def api():
         }
 
     except ValueError:
+        if debug_switch: raise
         return {'error': 'data_unavailable'}
     except:
+        if debug_switch: raise
         return {'error': 'server_unavailable'}
 
 def get_cached_weather(session, max_age, from_date=None):
     """Returns recently acquired weather information, if available."""
-    weather_data = query_weather_data(session).first()
+    query = query_weather_data(session)
+    from_date = from_date or datetime.now(tz)
+    weather_data = query.filter(WeatherData.date <= from_date).first()
     if weather_data:
         # Calculate the time difference to see if it’s still recent
-        now_date = from_date or datetime.now(tz)
         latest_date = weather_data.date.astimezone(tz)
-        if (now_date - latest_date).total_seconds() < max_age:
+        if (from_date - latest_date).total_seconds() < max_age:
             # Convert to common Weather class
             weather = weather_data.weather()
             # Replace with timezone aware date and provider
             weather.date = latest_date
-            weather.provder = provider.name
+            weather.provider = provider.name
             return weather
     return None
 
@@ -106,4 +116,5 @@ def aggregate_daily_report(session):
 
 
 if __name__ == '__main__':
-    app.run(debug=debug_switch, reloader=debug_switch)
+    # Since we run in a module, disable reloader
+    app.run(debug=debug_switch, reloader=False)

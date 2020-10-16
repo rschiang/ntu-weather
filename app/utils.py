@@ -1,6 +1,7 @@
 # Database utilities
 # (C) Poren Chiang 2020
 
+import os
 from contextlib import contextmanager
 from datetime import datetime, time
 from sqlalchemy import create_engine
@@ -9,7 +10,6 @@ from .models import Base, WeatherData
 
 # Configure database
 engine = create_engine(os.environ.get('DATABASE_URL'))
-Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 
 @contextmanager
@@ -24,6 +24,10 @@ def db_session():
         raise
     finally:
         session.close()
+
+def initialize_db():
+    """Initialize database, creating all tables if they don’t exist."""
+    Base.metadata.create_all(engine)
 
 def query_weather_data(session):
     """Returns a default query for WeatherData."""

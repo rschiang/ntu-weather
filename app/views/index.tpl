@@ -29,9 +29,9 @@
     </header>
 <%
     if not defined('error'):
-        rain_day = sum(data.rain_per_hour) for data in daily)
+        rain_day = (sum(data.rain_per_hour) for data in daily)
 
-        if rain > 0:
+        if weather.rain_per_hour > 0:
             weather_type = 'rainy'
         elif weather.humidity < 75 and rain_day <= 0:
             weather_type = 'skies'
@@ -57,12 +57,12 @@
             </div>
 % else:
             <div class="temperature">
-                <span class="current">{{ weather.temperature }}</span>
+                <span class="current">{{ round(weather.temperature) }}</span>
                 <span class="unit">°C</span>
             </div>
             <div class="dashboard">
                 <ul>
-                    <li>本日氣溫 <em>{{ temp_min }} – {{ temp_max }} °C</em></li>
+                    <li>本日氣溫 <em>{{ round(temp_min) }}{{ '' if abs(temp_max - temp_min) < 1.0 else ' – {}'.format(round(temp_max)) }} °C</em></li>
                     <li>地表氣溫 <em>{{ weather.ground_temperature }} °C</em></li>
                     <li>風向 <span class="wind" style="transform: rotate({{ weather.wind_direction - 90 }}deg)">➤</span> <em>{{ weather.wind_speed }} m/s</em></li>
                     <li>氣壓 <em>{{ weather.pressure }} hPa</em></li>
@@ -82,6 +82,7 @@
     </section>
     <footer class="section">
         <div class="social">
+            <iframe src="https://ghbtns.com/github-btn.html?user=rschiang&repo=ntu-weather&type=fork&count=true" frameborder="0" scrolling="0" width="150" height="20" title="GitHub"></iframe>
             <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2FNTUWelfare&width=92&layout=button_count&action=like&show_faces=false&share=false&height=21&appId=599411893573946" width="92" height="21" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
             <iframe src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fweather.ntustudents.org%2F&layout=button&mobile_iframe=true&appId=599411893573946&width=58&height=21" width="58" height="21" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
         </div>
@@ -96,17 +97,20 @@
     labels = []
     temperatures, humidities = [], []
     for data in daily:
-        pm = data.date.hour >= 12
-        hour = data.date.hour % 12
+        is_valid = hasattr(data, 'provider')
+
+        date = data.date if is_valid else data['date']
+        pm = date.hour >= 12
+        hour = date.hour % 12
         if hour == 0:
             labels.append('"12pm"' if pm else '"12am"')
         else:
             labels.append('"{}{}"'.format(hour, 'pm' if pm else 'am'))
         end
 
-        if not data.error:
-            temperatures.append(str(data.temperature))
-            humidities.append(str(data.humidity))
+        if is_valid:
+            temperatures.append(str(round(data.temperature)))
+            humidities.append(str(round(data.humidity)))
         else:
             temperatures.append('NaN')
             humidities.append('NaN')
