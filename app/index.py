@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 import os
-from bottle import Bottle, view
+from bottle import Bottle
 from datetime import datetime, timedelta
 from ntuweather.providers import NTUASProvider
 from pytz import timezone
-from .models import WeatherData, metadata
-from .utils import db_session, query_weather
+from sqlalchemy import func
+from .models import WeatherData
+from .utils import db_session, query_weather_data, today
 
 app = Bottle()
 debug_switch = (os.environ.get('DEBUG') == '1')
@@ -14,12 +15,25 @@ provider = NTUASProvider()
 
 @app.route('/', template='index')
 def index():
+    """Site index."""
     try:
         with db_session() as session:
+            # Retrieve the current weather
             weather = get_or_fetch_weather(session, max_age=900)
-            daily_report = aggregate_daily_report(session)
 
-        return {'weather': weather, 'daily': daily_report}
+            # Gather daily report and statistics
+            daily_report = aggregate_daily_report(session)
+            past_date = today(tz)
+            temp_max = session.query(func.max(WeatherData.temperature)).filter(WeatherData.date >= past_date).scalar()
+            temp_min = session.query(func.min(WeatherData.temperature)).filter(WeatherData.date >= past_date).scalar()
+
+        return {
+            'weather': weather,
+            'daily': daily_report,
+            'temp_max': temp_max,
+            'temp_min': temp_min,
+        }
+
     except ValueError:
         return {'error': 'data_unavailable'}
     except:
@@ -27,6 +41,7 @@ def index():
 
 @app.route('/api')
 def api():
+    """API endpoint."""
     try:
         with db_session() as session:
             weather = get_or_fetch_weather(session, max_age=300)
@@ -42,6 +57,7 @@ def api():
             'temp_ground': weather.ground_temperature,
             'provider': weather.provider,
         }
+
     except ValueError:
         return {'error': 'data_unavailable'}
     except:
@@ -87,6 +103,7 @@ def aggregate_daily_report(session):
 
     # Order by oldest
     return reversed(weather_list)
+
 
 if __name__ == '__main__':
     app.run(debug=debug_switch, reloader=debug_switch)

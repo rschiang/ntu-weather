@@ -2,6 +2,7 @@
 # (C) Poren Chiang 2020
 
 from contextlib import contextmanager
+from datetime import datetime, time
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from .models import Base, WeatherData
@@ -25,4 +26,10 @@ def db_session():
         session.close()
 
 def query_weather_data(session):
+    """Returns a default query for WeatherData."""
     return session.query(WeatherData).order_by(WeatherData.date.desc())
+
+def today(tz):
+    """Gets the timezone-aware midnight of a specific timezone."""
+    now_date = datetime.now(tz)
+    return tz.localize(datetime.combine(now_date.date(), time()))

@@ -62,7 +62,8 @@
             </div>
             <div class="dashboard">
                 <ul>
-                    <li>地表氣溫 <em>{{ value(temp_ground) }} °C</em></li>
+                    <li>本日氣溫 <em>{{ temp_min }} – {{ temp_max }} °C</em></li>
+                    <li>地表氣溫 <em>{{ weather.ground_temperature }} °C</em></li>
                     <li>風向 <span class="wind" style="transform: rotate({{ weather.wind_direction - 90 }}deg)">➤</span> <em>{{ weather.wind_speed }} m/s</em></li>
                     <li>氣壓 <em>{{ weather.pressure }} hPa</em></li>
                     <li>降雨強度 <em>{{ weather.rain_per_hour }} mm/h</em></li>
