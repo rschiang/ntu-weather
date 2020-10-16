@@ -14,7 +14,7 @@ a:hover, a:active {
 html, body {
     background: #f9f9f9;
     color: #2b2b2b;
-    font-family: Overpass, 'Pingfang TC', 'Source Han Sans TW', 'Microsoft Jhenghei', sans-serif;
+    font-family: Overpass, system-ui, 'Pingfang TC', 'Source Han Sans TC', 'Microsoft Jhenghei', sans-serif;
 }
 
 .section {
@@ -187,7 +187,7 @@ footer {
     footer .social {
         float: right;
         text-align: right;
-        width: 200px;
+        width: 250px;
     }
 
     .meta {
