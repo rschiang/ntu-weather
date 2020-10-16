@@ -1,83 +1,92 @@
 #!/usr/bin/env python3
 import os
-import pymongo
-import ntuweather
 from bottle import Bottle, view
-from bottle_mongo import MongoPlugin
 from datetime import datetime, timedelta
+from ntuweather.providers import NTUASProvider
 from pytz import timezone
+from .models import WeatherData, metadata
+from .utils import db_session, query_weather
 
 app = Bottle()
 debug_switch = (os.environ.get('DEBUG') == '1')
 tz = timezone('Asia/Taipei')
-
-# Configure database
-mongo_plugin = MongoPlugin(uri=os.environ.get('MONGODB_URI'), db='', keyword='mongo', tz_aware=True)
-app.install(mongo_plugin)
+provider = NTUASProvider()
 
 @app.route('/', template='index')
-def index(mongo):
-    last_doc = get_cached(mongo, timeout=900)
-    if not last_doc:
-        last_doc = fetch_and_cache(mongo)
-    last_doc['daily'] = aggregate_daily(mongo, datetime.now(tz))
-    return last_doc
+def index():
+    try:
+        with db_session() as session:
+            weather = get_or_fetch_weather(session, max_age=900)
+            daily_report = aggregate_daily_report(session)
+
+        return {'weather': weather, 'daily': daily_report}
+    except ValueError:
+        return {'error': 'data_unavailable'}
+    except:
+        return {'error': 'server_unavailable'}
 
 @app.route('/api')
-def api(mongo):
-    last_doc = get_cached(mongo, timeout=300)
-    if not last_doc:
-        last_doc = fetch_and_cache(mongo)
-    last_doc['date'] = last_doc['date'].isoformat()
-    return last_doc
+def api():
+    try:
+        with db_session() as session:
+            weather = get_or_fetch_weather(session, max_age=300)
+        return {
+            'date': weather.date.isoformat(),
+            'temperature': weather.temperature,
+            'pressure': weather.pressure,
+            'humidity': weather.humidity,
+            'wind_speed': weather.wind_speed,
+            'wind_direction': weather.wind_direction,
+            'rain': weather.rain_per_hour,
+            'rain_minute': weather.rain_per_minute,
+            'temp_ground': weather.ground_temperature,
+            'provider': weather.provider,
+        }
+    except ValueError:
+        return {'error': 'data_unavailable'}
+    except:
+        return {'error': 'server_unavailable'}
 
-def get_cached(mongo, timeout=600):
-    last_doc = get_one(mongo)
-
-    if last_doc:
-        now_date = datetime.now(tz)
-        last_date = last_doc['date'].astimezone(tz)
-        if (now_date - last_date).total_seconds() < timeout:
-            last_doc['date'] = last_date
-            return last_doc
-
+def get_cached_weather(session, max_age, from_date=None):
+    """Returns recently acquired weather information, if available."""
+    weather_data = query_weather_data(session).first()
+    if weather_data:
+        # Calculate the time difference to see if it’s still recent
+        now_date = from_date or datetime.now(tz)
+        latest_date = weather_data.date.astimezone(tz)
+        if (now_date - latest_date).total_seconds() < max_age:
+            # Convert to common Weather class
+            weather = weather_data.weather()
+            # Replace with timezone aware date and provider
+            weather.date = latest_date
+            weather.provder = provider.name
+            return weather
     return None
 
-def fetch_and_cache(mongo):
-    all_weather = mongo['weather']
-    this_doc = fetch_api()
-    if 'error' not in this_doc:
-        all_weather.insert_one(this_doc)
-        del this_doc['_id'] # pyMongo seems to be messing with our dict
-    return this_doc
+def get_or_fetch_weather(session, max_age):
+    """Loads recently acquired weather information or retrieves a new one."""
+    weather = get_cached_weather(session, max_age)
+    if not weather:
+        weather = provider.get()
+        weather_data = WeatherData.fromweather(weather)
+        session.add(weather_data)
+        session.commit()
+    return weather
 
-def fetch_api():
-    try:
-        response_text = weather.fetch()
-    except IOError:
-        return {'error': 'server_unavailable'}
-    try:
-        weather_dict = weather.parse(response_text)
-        weather_dict['date'] = tz.localize(datetime.strptime(weather_dict['date'], '%Y-%m-%d %H:%M:%S'))
-        return weather_dict
-    except Exception:
-        return {'error': 'data_unavailable'}
+def aggregate_daily_report(session):
+    """Queries and returns a list of weather records in the past 24 hours."""
+    weather_list = []
+    date = datetime.now(tz)
+    delta = timedelta(hours=3)
 
-def get_one(mongo, filters=None):
-    all_weather = mongo['weather']
-    return all_weather.find_one(filters, sort=[('date', pymongo.DESCENDING)], projection={'_id': False})
+    # Step through each time gap and seek closest record in a 30 min window.
+    for _ in range(8):
+        date -= delta
+        weather = get_cached_weather(session, max_age=1800, from_date=date)
+        weather_list.append(weather or {'date': date, 'error': 'data_unavailable'})
 
-def aggregate_daily(mongo, date):
-    doc_list = []
-    for i in range(8):
-        date -= timedelta(hours=3)
-        doc = get_one(mongo, {'date': { '$lte': date }})
-        if not doc:
-            doc = {'date': date, 'error': 'data_unavailable' }
-        else:
-            doc['date'] = doc['date'].astimezone(tz)
-        doc_list.append(doc)
-    return reversed(doc_list)
+    # Order by oldest
+    return reversed(weather_list)
 
 if __name__ == '__main__':
     app.run(debug=debug_switch, reloader=debug_switch)

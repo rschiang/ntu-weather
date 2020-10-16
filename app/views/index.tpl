@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="http://overpass-30e2.kxcdn.com/overpass.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overpass:wght@200;400;600&display=swap" />
     <link rel="stylesheet" href="https://rschiang.github.io/ntu-weather/assets/normalize.min.css" />
     <link rel="stylesheet" href="https://rschiang.github.io/ntu-weather/assets/chartist.min.css" />
     <link rel="stylesheet" href="https://rschiang.github.io/ntu-weather/assets/weather.css" />
@@ -22,29 +22,6 @@
         ga('create', 'UA-79166280-1', 'auto');
         ga('send', 'pageview');
     </script>
-<%
-    def value(text, default='N/A'):
-        try:
-            float_value = float(text)
-            return round(float_value)
-        except ValueError:
-            return default
-        end
-    end
-
-    def dec_value(text, default='N/A'):
-        try:
-            float_value = round(float(text), 1)
-            if float_value < 0.1:
-                return 0
-            else:
-                return float_value
-            end
-        except ValueError:
-            return default
-        end
-    end
-%>
 </head>
 <body>
     <header class="section">
@@ -52,13 +29,11 @@
     </header>
 <%
     if not defined('error'):
-        humidity = dec_value(humidity)
-        rain = dec_value(rain)
-        rain_day = sum(dec_value(data['rain']) for data in daily)
+        rain_day = sum(data.rain_per_hour) for data in daily)
 
         if rain > 0:
             weather_type = 'rainy'
-        elif humidity < 75 and rain_day <= 0:
+        elif weather.humidity < 75 and rain_day <= 0:
             weather_type = 'skies'
         else:
             weather_type = ''
@@ -82,16 +57,16 @@
             </div>
 % else:
             <div class="temperature">
-                <span class="current">{{ value(temperature, default='--') }}</span>
+                <span class="current">{{ weather.temperature }}</span>
                 <span class="unit">°C</span>
             </div>
             <div class="dashboard">
                 <ul>
                     <li>地表氣溫 <em>{{ value(temp_ground) }} °C</em></li>
-                    <li>風向 <span class="wind" style="transform: rotate({{ dec_value(wind_direction, default=0) - 90 }}deg)">➤</span> <em>{{ dec_value(wind_speed) }} m/s</em></li>
-                    <li>氣壓 <em>{{ dec_value(pressure) }} hPa</em></li>
-                    <li>降雨強度 <em>{{ rain }} mm/h</em></li>
-                    <li>濕度 <em>{{ humidity }}%</em></li>
+                    <li>風向 <span class="wind" style="transform: rotate({{ weather.wind_direction - 90 }}deg)">➤</span> <em>{{ weather.wind_speed }} m/s</em></li>
+                    <li>氣壓 <em>{{ weather.pressure }} hPa</em></li>
+                    <li>降雨強度 <em>{{ weather.rain_per_hour }} mm/h</em></li>
+                    <li>濕度 <em>{{ weather.humidity }}%</em></li>
                 </ul>
             </div>
             <div class="chart">
@@ -99,7 +74,7 @@
                 <div class="ct-chart secondary" id="humid-chart"></div>
             </div>
             <div class="source">
-                資料來源：{{ provider }}（最後更新：{{ date.strftime('%m/%d %H:%M') }}）
+                資料來源：{{ weather.provider }}（最後更新：{{ weather.date.strftime('%m/%d %H:%M') }}）
             </div>
 % end
         </div>
@@ -120,17 +95,17 @@
     labels = []
     temperatures, humidities = [], []
     for data in daily:
-        pm = data['date'].hour >= 12
-        hour = data['date'].hour % 12
+        pm = data.date.hour >= 12
+        hour = data.date.hour % 12
         if hour == 0:
             labels.append('"12pm"' if pm else '"12am"')
         else:
             labels.append('"{}{}"'.format(hour, 'pm' if pm else 'am'))
         end
 
-        if not 'error' in data:
-            temperatures.append(str(value(data['temperature'])))
-            humidities.append(str(value(data['humidity'])))
+        if not data.error:
+            temperatures.append(str(data.temperature))
+            humidities.append(str(data.humidity))
         else:
             temperatures.append('NaN')
             humidities.append('NaN')

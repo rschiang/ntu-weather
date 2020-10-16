@@ -4,6 +4,7 @@
 import re
 import requests
 from datetime import datetime
+from pytz import timezone
 from .models import Weather, Provider
 from .exceptions import WeatherParseError
 
@@ -14,9 +15,13 @@ class NTUASProvider(Provider):
         """Initialize NTU AS Provider, optionally with an alternative data feed."""
         super().__init__(name='國立臺灣大學中尺度暨地形降水研究室')
         self.url = url or 'http://140.112.67.180/data.php'
+        self.timezone = timezone('Asia/Taipei')
 
     def get(self):
         """Acquire weather information from NTU AS."""
+
+        # Reset state
+        self.text = None
 
         # Retrieve the information for the website
         request = requests.get(self.url)
@@ -55,7 +60,8 @@ class NTUASProvider(Provider):
         string = self._search(pattern)
         if string:
             try:
-                return datetime.strptime(string, '%Y-%m-%d %H:%M:%S')
+                date = datetime.strptime(string, '%Y-%m-%d %H:%M:%S')
+                return self.timezone.localize(date)
             except ValueError: pass
         raise WeatherParseError(text=self.text, arg=arg)
 
