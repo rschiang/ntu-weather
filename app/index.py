@@ -109,7 +109,7 @@ def aggregate_daily_report(session):
     for _ in range(8):
         date -= delta
         weather = get_cached_weather(session, max_age=1800, from_date=date)
-        weather_list.append(weather or {'date': date, 'error': 'data_unavailable'})
+        weather_list.append(weather or WeatherData(date=date, valid=False))
 
     # Order by oldest
     return reversed(weather_list)

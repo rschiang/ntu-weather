@@ -44,6 +44,7 @@ class NTUASProvider(Provider):
             rain_per_minute=self._search_float(r'分鐘降雨量\(mm\)：\s*([\d\.]+)\s*</div>', 'rain_per_minute'),
             ground_temperature=self._search_float(r'0cm地溫\(℃\)：\s*([\d\.]+)\s*</div>', 'ground_temperature'),
             provider=self.name,
+            valid=True,
         )
 
     # Utilities
@@ -111,4 +112,6 @@ class NTUSAProvider(Provider):
             rain_per_hour=float(self.data['rain']),
             rain_per_minute=float(self.data['rain_minute']),
             ground_temperature=float(self.data['temp_ground']),
-            provider=self.data['provider'] or self.name)
+            provider=self.data['provider'] or self.name,
+            valid=True,
+        )

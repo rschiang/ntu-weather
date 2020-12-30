@@ -17,9 +17,10 @@ class Weather:
     rain_per_minute: float
     ground_temperature: float
     provider: str
+    valid: bool
 
     def __str__(self):
-        if not self.date:
+        if not self.valid or not self.date:
             return '<Weather: invalid>'
 
         date_str = self.date.isoformat(sep=' ', timespec='minutes')

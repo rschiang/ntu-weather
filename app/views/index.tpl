@@ -29,7 +29,7 @@
     </header>
 <%
     if not defined('error'):
-        rain_day = sum(data.rain_per_hour for data in daily)
+        rain_day = sum(data.rain_per_hour for data in daily if data.valid)
 
         if weather.rain_per_hour > 0:
             weather_type = 'rainy'
@@ -97,9 +97,7 @@
     labels = []
     temperatures, humidities = [], []
     for data in daily:
-        is_valid = hasattr(data, 'provider')
-
-        date = data.date if is_valid else data['date']
+        date = data.date
         pm = date.hour >= 12
         hour = date.hour % 12
         if hour == 0:
@@ -108,7 +106,7 @@
             labels.append('"{}{}"'.format(hour, 'pm' if pm else 'am'))
         end
 
-        if is_valid:
+        if data.valid:
             temperatures.append(str(round(data.temperature)))
             humidities.append(str(round(data.humidity)))
         else:
