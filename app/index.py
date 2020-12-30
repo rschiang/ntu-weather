@@ -86,6 +86,7 @@ def get_cached_weather(session, max_age, from_date=None):
             # Replace with timezone aware date and provider
             weather.date = latest_date
             weather.provider = provider.name
+            weather.valid = True
             return weather
     return None
 
@@ -112,7 +113,7 @@ def aggregate_daily_report(session):
         weather_list.append(weather or WeatherData(date=date, valid=False))
 
     # Order by oldest
-    return reversed(weather_list)
+    return list(reversed(weather_list))
 
 
 if __name__ == '__main__':
