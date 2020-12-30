@@ -35,4 +35,5 @@ class WeatherData(Base):
     def fromweather(cls, weather):
         fields = dataclasses.asdict(weather)
         del fields['provider']  # We don’t store provider name as there would be only one.
+        del fields['valid']     # We only store valid weather data, hence.
         return cls(**fields)
