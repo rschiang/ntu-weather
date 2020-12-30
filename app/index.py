@@ -3,6 +3,7 @@
 # (C) Poren Chiang 2016–2020
 
 import bottle
+import logging
 import os
 from datetime import datetime, timedelta
 from ntuweather.providers import NTUASProvider
@@ -41,9 +42,11 @@ def index():
 
     except ValueError:
         if debug_switch: raise
+        logging.exception('Data unavailable')
         return {'error': 'data_unavailable'}
     except:
         if debug_switch: raise
+        logging.exception('Failed to load weather')
         return {'error': 'server_unavailable'}
 
 @app.route('/api')
@@ -67,9 +70,11 @@ def api():
 
     except ValueError:
         if debug_switch: raise
+        logging.exception('Data unavailable')
         return {'error': 'data_unavailable'}
     except:
         if debug_switch: raise
+        logging.exception('Failed to load weather')
         return {'error': 'server_unavailable'}
 
 def get_cached_weather(session, max_age, from_date=None):
