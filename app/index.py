@@ -6,6 +6,7 @@ import bottle
 import logging
 import os
 from datetime import datetime, timedelta
+from ntuweather import Weather
 from ntuweather.providers import NTUASProvider
 from pytz import timezone
 from sqlalchemy import func
@@ -115,7 +116,7 @@ def aggregate_daily_report(session):
     for _ in range(8):
         date -= delta
         weather = get_cached_weather(session, max_age=1800, from_date=date)
-        weather_list.append(weather or WeatherData(date=date, valid=False))
+        weather_list.append(weather or Weather(date=date, valid=False))
 
     # Order by oldest
     return list(reversed(weather_list))
