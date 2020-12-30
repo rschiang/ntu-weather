@@ -4,6 +4,7 @@
 import os
 from contextlib import contextmanager
 from datetime import datetime, time
+from ntuweather import Weather
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from .models import Base, WeatherData
@@ -32,6 +33,20 @@ def initialize_db():
 def query_weather_data(session):
     """Returns a default query for WeatherData."""
     return session.query(WeatherData).order_by(WeatherData.date.desc())
+
+def invalid_weather(date=None):
+    """Initializes an invalid Weather class, optionally with a Date."""
+    return Weather(date=date,
+        temperature=0.0,
+        pressure=0.0,
+        humidity=0.0,
+        wind_speed=0.0,
+        wind_direction=0,
+        rain_per_hour=0.0,
+        rain_per_minute=0.0,
+        ground_temperature=0.0,
+        provider='',
+        valid=False)
 
 def today(tz):
     """Gets the timezone-aware midnight of a specific timezone."""
