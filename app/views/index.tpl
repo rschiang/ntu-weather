@@ -29,7 +29,7 @@
     </header>
 <%
     if not defined('error'):
-        rain_day = (sum(data.rain_per_hour) for data in daily)
+        rain_day = sum(data.rain_per_hour for data in daily)
 
         if weather.rain_per_hour > 0:
             weather_type = 'rainy'
