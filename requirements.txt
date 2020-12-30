@@ -1,7 +1,7 @@
-bottle==0.12.18
+bottle==0.12.19
 colorama==0.4.4
 gunicorn==20.0.4
 psycopg2-binary==2.8.6
-pytz==2020.1
-requests==2.24.0
-SQLAlchemy==1.3.20
+pytz==2020.5
+requests==2.25.1
+SQLAlchemy==1.3.22
